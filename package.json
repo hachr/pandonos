@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/hachr/pandonos#readme",
   "dependencies": {
+    "bunyan": "^1.4.0",
     "restify": "^3.0.3"
   }
 }

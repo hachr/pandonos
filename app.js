@@ -1,6 +1,16 @@
-var restify = require('restify');
+"use strict";
 
-var server = restify.createServer();
+var restify = require('restify');
+var Logger = require('bunyan');
+
+var log = new Logger.createLogger({
+	name: 'pandonos',
+	serializers: {
+		req: Logger.stdSerializers.req
+	}
+});
+
+var server = restify.createServer({name: 'pandonos', log: log});
 
 server.use(restify.CORS());
 server.use(restify.dateParser());
@@ -19,6 +29,11 @@ server.use(restify.throttle({
 	}
 }));
 
+//log request
+server.pre(function (request, response, next) {
+	request.log.info({req: request}, JSON.stringify(request.body));
+	next();
+});
 
 server.get("/ping", function ping(req, res, next) {
 	res.send("pong");
